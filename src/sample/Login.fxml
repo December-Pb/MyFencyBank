@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+
+<BorderPane maxHeight="100" maxWidth="200" minHeight="100" minWidth="200" prefHeight="100.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <Label text="Please Choose Your Option" BorderPane.alignment="CENTER" />
+   </center>
+   <bottom>
+      <HBox alignment="TOP_CENTER" BorderPane.alignment="CENTER">
+         <children>
+            <Button id="ManagerBtn" fx:id="ManagerBtn" mnemonicParsing="false" text="Manager" />
+            <Separator prefWidth="30" />
+            <Button id="CustomerBtn" fx:id="CustomerBtn" mnemonicParsing="false" text="Customer" />
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </HBox>
+   </bottom>
+   <padding>
+      <Insets bottom="5.0" />
+   </padding>
+</BorderPane>
