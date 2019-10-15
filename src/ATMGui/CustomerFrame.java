@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 
 public class CustomerFrame extends JFrame {
-
     private JFrame customerFrame = new JFrame();
 
     private JFrame parentFrame;
@@ -79,7 +78,8 @@ public class CustomerFrame extends JFrame {
         tablePanel.add(table);
 
         createCardBtn.addActionListener(e->{
-
+            customerFrame.setVisible(false);
+            CreateCardFrame createCardFrame = new CreateCardFrame(this);
         });
 
         insertCardBtn.addActionListener(e -> {
@@ -99,5 +99,14 @@ public class CustomerFrame extends JFrame {
             customerFrame.dispose();
             parentFrame.setVisible(true);
         });
+    }
+
+
+    public JFrame getCustomerFrame() {
+        return customerFrame;
+    }
+
+    public CustomerController getCustomerController() {
+        return customerController;
     }
 }

@@ -16,6 +16,10 @@ public class Customer extends BankSystemUser{
         this.firstName = firstName;
         this.lastName = lastName;
         accountList = new ArrayList<Account>();
+        Account savingAccount = new SavingAccount(10);
+        Account checkingAccount = new CheckingAccount(10);
+        accountList.add(savingAccount);
+        accountList.add(checkingAccount);
         loan = 0.0;
         statement = new ArrayList<Statement>();
         this.cardNumber = cardNumber;
