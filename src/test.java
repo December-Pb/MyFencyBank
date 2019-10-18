@@ -1,12 +1,14 @@
-import ATM.ATMType;
-import ATM.CustomerATM;
-import User.BankSystemUser;
-import User.Customer;
+import GUI.*;
 
-public class test {
+import javax.swing.*;
+
+public class Test {
 
     public static void main(String[] args) {
-        ATMType atm = new CustomerATM();
-
+        ChooseOptionFrame chooseOptionFrame = new ChooseOptionFrame();
+//        SaveWithdrawMoneyFrame getLoanFrame = new SaveWithdrawMoneyFrame(new CustomerFrame(new ChooseOptionFrame()));
+//        TransferMoneyFrame transferMoneyFrame = new TransferMoneyFrame(new CustomerFrame(chooseOptionFrame));
+//        PayLoanFrame payLoanFrame = new PayLoanFrame(new CustomerFrame(chooseOptionFrame));
     }
+
 }
