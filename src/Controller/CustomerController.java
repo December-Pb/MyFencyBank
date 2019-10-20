@@ -61,10 +61,25 @@ public class CustomerController {
 
     public List<String> getAccountNumber(String ID) {
         Customer customer = atm.getCustomer(ID);
+        if(customer == null)
+            return null;
         List<Account> accountList = customer.getAccountList();
         List<String> result = new ArrayList<>();
         for(Account account : accountList) {
             result.add(account.getAccountNumber());
+        }
+        return result;
+    }
+
+    public List<String> getCheckingAccountNumber(String ID) {
+        Customer customer = atm.getCustomer(ID);
+        if(customer == null)
+            return null;
+        List<Account> accountList = customer.getAccountList();
+        List<String> result = new ArrayList<>();
+        for(Account account : accountList) {
+            if(account instanceof CheckingAccount)
+                result.add(account.getAccountNumber());
         }
         return result;
     }
@@ -108,5 +123,65 @@ public class CustomerController {
 
     public boolean payLoan(String ID, String loanNumber, String accountNumber, String currencyName, String loanCurrencyName, double money) {
         return atm.payLoan(ID, loanNumber, accountNumber, currencyName, loanCurrencyName, money);
+    }
+
+    /**
+     * Transfer money from one customer to another customer, I assume the customer will transfer the money out to one "pool", and then
+     * another customer will get the money from the "pool". So the inputCardNumber represent the card transfer out the money
+     * @param inputCardNumber The card transfer out money
+     * @param outputCardNumber The card transfer in money
+     * @param inputAccountNumber The account number transfer out money
+     * @param outputAccountNumber The account number transfer in money
+     * @param inputCurrencyName The currency transfer in money
+     * @param outputCurrencyName The currency transfer out money
+     * @param money The amount of money
+     * @return Whether the transfer is successful
+     */
+    public boolean transferMoneyToOther(String inputCardNumber, String outputCardNumber, String inputAccountNumber, String outputAccountNumber,
+                                        String inputCurrencyName, String outputCurrencyName, double money) {
+        Customer inputCustomer = atm.getCustomer(inputCardNumber);
+        Customer outputCustomer = atm.getCustomer(outputCardNumber);
+        Account inputAccount = null;
+        Account outputAccout = null;
+        Currency inputCurrency = null;
+        Currency outputCurrency = null;
+
+        if(inputCustomer != null && outputCustomer != null) {
+            List<Account> inputAccountList = inputCustomer.getAccountList();
+            List<Account> outputAccountList = outputCustomer.getAccountList();
+            for(Account account:inputAccountList)
+                if(inputAccountNumber.equals(account.getAccountNumber()))
+                    inputAccount = account;
+            for(Account account:outputAccountList)
+                if(outputAccountNumber.equals(account.getAccountNumber()))
+                    outputAccout = account;
+        }
+
+        if(inputAccount != null && outputAccout != null && inputAccount instanceof CheckingAccount && outputAccout instanceof CheckingAccount) {
+            List<Currency> inputCurrencyList = inputAccount.getCurrencies();
+            List<Currency> outputCurrencyList = outputAccout.getCurrencies();
+            for(Currency currency : inputCurrencyList)
+                if(inputCurrencyName.equals(currency.getCurrencyName()))
+                    inputCurrency = currency;
+            for(Currency currency : outputCurrencyList)
+                if(outputCurrencyName.equals(currency.getCurrencyName()))
+                    outputCurrency = currency;
+        }
+
+        if(inputCurrency != null && outputCurrency != null) {
+            if(inputCurrency.getDeposit() >= money) {
+                inputCurrency.setDeposit(inputCurrency.getDeposit() - money);
+                money = inputCurrency.transferOut(money);
+                money = outputCurrency.transferIn(money);
+                outputCurrency.setDeposit(outputCurrency.getDeposit() + money);
+                inputCustomer.getStatement().add(new Statement("Transfer " + money + " out to " + outputCardNumber));
+                outputCustomer.getStatement().add(new Statement(inputCardNumber + " transferred " + money + " to you"));
+                BankMananger bankManager = BankManagerDAOImpl.getInstance().getBankManager("1");
+                bankManager.getCurrentStatement().add(new Statement(inputCardNumber + " transferred " + money + " to " + outputCardNumber));
+                return true;
+            }
+        }
+
+        return false;
     }
 }

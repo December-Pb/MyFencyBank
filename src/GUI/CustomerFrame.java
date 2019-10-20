@@ -26,6 +26,7 @@ public class CustomerFrame extends JFrame {
     private JButton payLoanBtn = new JButton("Pay The Loan");
     private JButton getCustomerInfo = new JButton("Get My Information");
     private JButton returnLastFrameBtn = new JButton("Return Last Interface");
+    private JButton transactionBtn = new JButton("Transfer Money to Others");
 
     private DefaultTableModel userInfo = new DefaultTableModel() {
         @Override
@@ -100,6 +101,10 @@ public class CustomerFrame extends JFrame {
 
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 11;
+        add(transactionBtn, gridBagConstraints);
+
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 12;
         add(returnLastFrameBtn, gridBagConstraints);
 
         gridBagConstraints.gridx = 1;
@@ -184,8 +189,9 @@ public class CustomerFrame extends JFrame {
 
         });
 
-        transferMoneyBtn.addActionListener(e -> {
-            String ID = nameLabel.getText();
+        transactionBtn.addActionListener(e -> {
+            TransferMoneyToOtherFrame transferMoneyToOtherFrame = new TransferMoneyToOtherFrame(this);
+            this.setVisible(false);
         });
 
         table.addMouseListener(new MouseAdapter() {
